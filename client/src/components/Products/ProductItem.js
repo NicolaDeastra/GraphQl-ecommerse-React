@@ -1,5 +1,6 @@
-import React from 'react';
-import styled from 'styled-components';
+import React from "react";
+import styled from "styled-components";
+import AddToCartButton from "../Cart/AddToCartButton";
 
 const ProductItemWrapper = styled.div`
   display: flex;
@@ -26,6 +27,7 @@ const ProductItem = ({ data }) => (
   <ProductItemWrapper>
     <Thumbnail src={data.thumbnail} width={200} />
     <Title>{data.title}</Title>
+    <AddToCartButton productId={data.id} />
   </ProductItemWrapper>
 );
 

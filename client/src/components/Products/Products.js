@@ -1,7 +1,19 @@
-import React from 'react';
-import styled from 'styled-components';
-import SubHeader from '../Header/SubHeader';
-import ProductItem from './ProductItem';
+import React from "react";
+import styled from "styled-components";
+import { Query } from "react-apollo";
+import gql from "graphql-tag";
+import SubHeader from "../Header/SubHeader";
+import ProductItem from "./ProductItem";
+
+const GET_PRODUCTS = gql`
+  query getProducts {
+    products {
+      id
+      title
+      thumbnail
+    }
+  }
+`;
 
 const ProductItemsWrapper = styled.div`
   display: flex;
@@ -16,35 +28,30 @@ const Alert = styled.span`
   text-align: center;
 `;
 
-const Products = ({ history, loading, error, products }) => {
-  const isEmpty = products.length === 0 ? 'No products available' : false;
-
-  return (
-    <>
-      {history && (
-        <SubHeader
-          title='Available products'
-          goToCart={() => history.push('/cart')}
-        />
-      )}
-      {!loading && !error && !isEmpty ? (
-        <ProductItemsWrapper>
-          {products &&
-            products.map(product => (
-              <ProductItem key={product.id} data={product} />
-            ))}
-        </ProductItemsWrapper>
-      ) : (
-        <Alert>{loading ? 'Loading' : error || isEmpty}</Alert>
-      )}
-    </>
-  );
-};
-
-Products.defaultProps = {
-  loading: false,
-  error: '',
-  products: [],
-};
+const Products = ({ match, history }) => (
+  <>
+    {history && (
+      <SubHeader
+        title="Available products"
+        goToCart={() => history.push("/cart")}
+      />
+    )}
+    <Query query={GET_PRODUCTS}>
+      {({ loading, error, data }) => {
+        if (loading || error) {
+          return <Alert>{loading ? "Loading..." : error}</Alert>;
+        }
+        return (
+          <ProductItemsWrapper>
+            {data.products &&
+              data.products.map((product) => (
+                <ProductItem key={product.id} data={product} />
+              ))}
+          </ProductItemsWrapper>
+        );
+      }}
+    </Query>
+  </>
+);
 
 export default Products;
