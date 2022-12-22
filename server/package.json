@@ -11,7 +11,7 @@
     "faker": "4.1.0",
     "graphql": "14.5.8",
     "http": "0.0.0",
-    "jsonwebtoken": "8.5.1",
+    "jsonwebtoken": "9.0.0",
     "nodemon": "1.19.1"
   },
   "scripts": {
